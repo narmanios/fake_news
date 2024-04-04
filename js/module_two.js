@@ -1,6 +1,6 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
-const dataURL = "/data/output_ModuleTwo.json"; 
+const dataURL = "../data/output_ModuleTwo.json"; 
 
 async function barchart() {
     const margin = { top: 0, right: 200, bottom: 120, left: 200 };
