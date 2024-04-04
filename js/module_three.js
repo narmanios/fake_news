@@ -1,7 +1,7 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 async function heatmap() {
-    const data = await d3.json("/data/output_ModuleThree.json");
+    const data = await d3.json("./data/output_ModuleThree.json");
     const sourcesToKeep = new Set(["Facebook posts", "Donald Trump", "Viral image", "Bloggers", "Tweets", "Hillary Clinton", "Marco Rubio"]);
     const labelsToGroup = new Set(["full-flop", "half-flip", "no-flip"]);
 
