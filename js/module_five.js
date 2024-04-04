@@ -1,7 +1,7 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 async function scatterplot() {
-    const dataURL = "../data/output_ModuleFive.json";
+    const dataURL = "./data/output_ModuleFive.json";
 
     // Set the dimensions of the canvas / graph
     const margin = { top: 30, right: 20, bottom: 60, left: 60 },
