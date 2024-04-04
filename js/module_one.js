@@ -31,7 +31,7 @@ async function bubblechart() {
         .attr("width", width)
         .attr("height", height);
 
-    const dataURL = "data/output_ModuleOne.json";
+    const dataURL = "./data/output_ModuleOne.json";
 
     fetch(dataURL)
         .then(response => response.json())
