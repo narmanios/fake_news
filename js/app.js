@@ -1,7 +1,7 @@
-import { bubblechart } from "./js/module_one.js";
-import { barchart } from "./js/module_two.js";
-import { heatmap } from "./js/module_three.js";
-import { scatterplot } from "./js/module_five.js";
+import { bubblechart } from "./module_one.js";
+import { barchart } from "./module_two.js";
+import { heatmap } from "./module_three.js";
+import { scatterplot } from "./module_five.js";
 
 bubblechart();
 barchart();
