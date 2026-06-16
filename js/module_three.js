@@ -43,11 +43,12 @@ async function heatmap() {
 
     // Create the table and adjust its sizing
     const table = d3.select("#app_three")
-                    .insert("table")
+                    .append("div")
+                    .attr("class", "table-scroll")
+                    .append("table")
                     .classed("my-table", true)
                     .style("margin", "auto")
-                    .style("width", "1000px")
-                    .style("height", "500px");
+                    .style("width", "100%");
 
     const thead = table.append("thead");
     const tbody = table.append("tbody");

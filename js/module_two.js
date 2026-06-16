@@ -3,27 +3,26 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 const dataURL = "./data/output_ModuleTwo.json"; 
 
 async function barchart() {
-    const margin = { top: 0, right: 200, bottom: 120, left: 200 };
-    const width = window.innerWidth - margin.left - margin.right;
-    const height = 800;
+    const container = document.querySelector("#app_two");
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const margin = isMobile
+        ? { top: 0, right: 20, bottom: 120, left: 56 }
+        : { top: 0, right: 200, bottom: 120, left: 200 };
+    const width = Math.max((container?.clientWidth || window.innerWidth) - margin.left - margin.right, 280);
+    const height = isMobile ? 540 : 800;
 
     const svg = d3.select("#app_two")
         .insert("svg")
         .attr("id", "bar-chart")
-        // .style("background-color", "rgba(255, 255, 255, 0.05)")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
+        .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .style("width", "100%")
+        .style("height", "auto")
+        .style("display", "block")
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
-
-        const colorScale = d3.scaleOrdinal()
-        .domain(["Category1", "Category2", "Category3"]) // Replace with actual categories
-        .range(["#red", "#yellow", "#green"]);       // Replace with actual colors
-    
-
-
-
-        
 
     // Create tooltip
     const tooltip = d3.select("body").append("div")
@@ -112,6 +111,15 @@ async function barchart() {
                 .attr("transform", `translate(0,${height})`)
                 .call(d3.axisBottom(xScale));
 
+            if (isMobile) {
+                svg.select(".xaxis")
+                    .selectAll("text")
+                    .style("text-anchor", "end")
+                    .attr("dx", "-0.6em")
+                    .attr("dy", "0.15em")
+                    .attr("transform", "rotate(-40)");
+            }
+
             svg.append("g")
                 .attr("class", "yaxis") // Add this class
                 .call(d3.axisLeft(yScale));
@@ -121,7 +129,7 @@ async function barchart() {
                 .attr("class", "y_axis_label")
                 .attr("transform", "rotate(-90)")
                 .attr("fill", "#222")
-                .attr("y", 100 - margin.left)
+                .attr("y", 20 - margin.left)
                 .attr("x", 0 - (height / 2))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")

@@ -3,6 +3,8 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 async function bubblechart() {
     const topKeywords = ['All', 'Trump', 'President', 'Obama', 'Clinton', 'Hillary', 'White', 'State', 'News', 'Media', 'Police'];
     const otherKeywords = ['All', 'FBI', 'Intelligence', 'Press', 'Republican', 'Vote', 'Law', 'Donald', 'Gun', 'Muslim', 'Money', 'National'];
+    const container = document.querySelector("#app_one");
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
     d3.select("#keywordDropdown")
         .selectAll("option")
@@ -20,16 +22,21 @@ async function bubblechart() {
         .text(d => d)
         .attr("value", d => d);
 
-        const margin = { top: 40, right: 0, bottom: 30, left: 0 };
-        const width = window.innerWidth - margin.left - margin.right;
-        const height = 850 + margin.top - margin.bottom;
-        const maxBubbleSize = 20;
+    const margin = { top: 40, right: 0, bottom: 30, left: 0 };
+    const width = Math.max((container?.clientWidth || window.innerWidth) - margin.left - margin.right, 320);
+    const height = isMobile ? 700 : 850 + margin.top - margin.bottom;
+    const maxBubbleSize = isMobile ? 18 : 20;
 
     const svg = d3.select("#app_one")
         .append("svg")
         .attr("id", "bubble-chart")
         .attr("width", width)
-        .attr("height", height);
+        .attr("height", height)
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .style("width", "100%")
+        .style("height", "auto")
+        .style("display", "block");
 
     const dataURL = "./data/output_ModuleOne.json";
 
@@ -55,18 +62,6 @@ async function bubblechart() {
                 .style("font-size", "12px");
 
             renderBubbles(data);
-
-            d3.select("#keywordDropdown").on("change", function() {
-                const selectedKeyword = d3.select(this).property("value").toLowerCase();
-                updateBubbles(selectedKeyword);
-                d3.select("#otherKeywordDropdown").property("disabled", selectedKeyword !== 'all');
-            });
-
-            d3.select("#otherKeywordDropdown").on("change", function() {
-                const selectedKeyword = d3.select(this).property("value").toLowerCase();
-                updateBubbles(selectedKeyword);
-                d3.select("#keywordDropdown").property("disabled", selectedKeyword !== 'all');
-            });
 
             function updateBubbles(selectedKeyword, dropdownBeingUsed) {
                 svg.selectAll("circle")
@@ -147,7 +142,7 @@ updateBubbles(selectedKeyword, "otherKeywordDropdown");
                     .attr("text-anchor", "middle")
                     .attr("dominant-baseline", "middle")
                     .style("fill", "white")
-                    .style("font-size", d => `${sizeScale(d.tweet_num) / 2}px`);
+                    .style("font-size", d => `${Math.max(isMobile ? 8 : 10, sizeScale(d.tweet_num) / 2)}px`);
 
                 const simulation = d3.forceSimulation(data)
                     .force("charge", d3.forceManyBody().strength(10))

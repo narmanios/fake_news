@@ -2,11 +2,17 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 async function scatterplot() {
     const dataURL = "./data/output_ModuleFive.json";
+    const container = document.querySelector("#scatter-plot");
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
     // Set the dimensions of the canvas / graph
-    const margin = { top: 30, right: 20, bottom: 60, left: 60 },
-        width = 1100 - margin.left - margin.right,
-        height = 570 - margin.top - margin.bottom;
+    const margin = isMobile
+        ? { top: 20, right: 20, bottom: 70, left: 52 }
+        : { top: 30, right: 20, bottom: 60, left: 60 };
+    const outerWidth = Math.max(container?.clientWidth || 1100, 320);
+    const outerHeight = isMobile ? 460 : 570;
+    const width = outerWidth - margin.left - margin.right;
+    const height = outerHeight - margin.top - margin.bottom;
 
     const color = d3.scaleOrdinal()
         .domain(["FALSE", "REAL"]) // Assuming domain_type values are "FALSE" and "TRUE"
@@ -22,8 +28,13 @@ async function scatterplot() {
     // Set up the SVG container
     const svg = d3.select("#scatter-plot")
         .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("width", outerWidth)
+        .attr("height", outerHeight)
+        .attr("viewBox", `0 0 ${outerWidth} ${outerHeight}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .style("width", "100%")
+        .style("height", "auto")
+        .style("display", "block")
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
@@ -44,15 +55,15 @@ async function scatterplot() {
         .attr("transform", `translate(${width / 2}, ${height + margin.bottom - 5})`)
         .attr("class", "axislabel")
         .attr("y", 0)
-        .attr("x", 10 - margin.left) // Adjusted y-offset
+        .attr("x", isMobile ? 0 : 10 - margin.left)
         .style("text-anchor", "middle")
         .style("margin-top", "20px")
         .text("Tweets per Fake Article");
 
-        svg.append("text")
+    svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("class", "axislabel")
-        .attr("y", -60) // Adjusted y-offset
+        .attr("y", isMobile ? -44 : -60)
         .attr("x", 10 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
@@ -85,7 +96,7 @@ async function scatterplot() {
         .data(data)
         .enter().append("circle")
         .attr("class", "scatter-dot") // Class for the dots
-        .attr("r", 5)
+        .attr("r", isMobile ? 4 : 5)
         .attr("cx", d => x(d.x))
         .attr("cy", d => y(d.y))
         .style("fill", d => d.color); // Use the assigned color
@@ -114,7 +125,7 @@ async function scatterplot() {
 // Create a legend group
 const legend = svg.append("g")
   .attr("class", "legend")
-  .attr("transform", `translate(${width - 80}, 0)`); // Position the legend
+  .attr("transform", `translate(${Math.max(width - 80, 0)}, 0)`); // Position the legend
 
 // Add legend items
 legend.selectAll("rect")
@@ -134,7 +145,7 @@ legend.selectAll("text")
     .attr("x", 30) // Offset text to the right of the rectangles
     .attr("y", (d, i) => i * 25 + 12) // Vertically align text with rectangles
     .text(d => d.label)
-    .style("font-size", "15px")
+    .style("font-size", isMobile ? "13px" : "15px")
     .attr("alignment-baseline","middle");
 
 
