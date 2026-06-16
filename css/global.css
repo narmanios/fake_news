@@ -14,7 +14,7 @@ body {
   margin: auto;
   max-width: 100%;
   overflow-x: hidden;
-  padding-bottom: 40px;
+  padding-bottom: 56px;
 }
 
 img {
@@ -492,15 +492,6 @@ svg {
     width: min(100%, 360px);
     margin: 24px auto 0;
     padding: 0 16px;
-  }
-
-  h6 {
-    position: static;
-    margin-top: 32px;
-  }
-
-  body {
-    padding-bottom: 0;
   }
 }
 
